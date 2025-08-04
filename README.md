@@ -2,6 +2,25 @@
 
 A dynamic blog website built with Laravel featuring posts, categories, and tags.
 
+## Prerequisites
+
+Before setting up this project, make sure you have the following installed:
+
+### Required Software:
+- **PHP 8.1 or higher** - [Download PHP](https://windows.php.net/download/)
+- **Composer** - [Download Composer](https://getcomposer.org/download/)
+- **Git** - [Download Git](https://git-scm.com/downloads)
+- **Web Server** (Apache/Nginx) or use Laravel's built-in server
+
+### Database:
+- **SQLite** (included with PHP) - Recommended for development
+- **MySQL** - [Download MySQL](https://dev.mysql.com/downloads/)
+- **PostgreSQL** - [Download PostgreSQL](https://www.postgresql.org/download/)
+
+### Optional (for better development experience):
+- **Node.js & NPM** - [Download Node.js](https://nodejs.org/) (for frontend assets)
+- **VS Code** - [Download VS Code](https://code.visualstudio.com/) (recommended editor)
+
 ## Project Setup
 
 This project has been set up with the following database structure and backend functionality:
@@ -57,13 +76,50 @@ This project has been set up with the following database structure and backend f
 
 ## Getting Started
 
-1. Clone the repository
-2. Run `composer install`
-3. Copy `.env.example` to `.env` and configure database
-4. Run `php artisan key:generate`
-5. Run `php artisan migrate` (already done)
-6. Run `php artisan db:seed` (already done)
-7. Start the development server with `php artisan serve`
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ciit-cs401-1/somewhere-over-the-raindow.git
+   cd somewhere-over-the-raindow
+   ```
+
+2. **Install PHP dependencies**
+   ```bash
+   composer install
+   ```
+
+3. **Set up environment file**
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Generate application key**
+   ```bash
+   php artisan key:generate
+   ```
+
+5. **Configure database** (edit `.env` file)
+   ```env
+   DB_CONNECTION=sqlite
+   DB_DATABASE=/absolute/path/to/database.sqlite
+   ```
+
+6. **Run database migrations**
+   ```bash
+   php artisan migrate
+   ```
+
+7. **Seed the database with sample data**
+   ```bash
+   php artisan db:seed
+   ```
+
+8. **Start the development server**
+   ```bash
+   php artisan serve
+   ```
+
+9. **Visit the application**
+   Open [http://localhost:8000](http://localhost:8000) in your browser
 
 ## Available Routes
 
@@ -127,5 +183,21 @@ The database has been seeded with:
 - **Validation**: Comprehensive form validation
 - **Relationships**: Proper Eloquent relationships between all entities
 - **Scopes**: Published posts scope for filtering
+
+## Troubleshooting
+
+### Common Issues:
+
+1. **"No application encryption key has been specified"**
+   - Run: `php artisan key:generate`
+
+2. **"Class 'PDO' not found"**
+   - Install PHP PDO extension: `sudo apt-get install php-pdo` (Linux) or enable in php.ini (Windows)
+
+3. **"SQLite database does not exist"**
+   - The migration will create it automatically, just run: `php artisan migrate`
+
+4. **"Permission denied"**
+   - Make sure storage and bootstrap/cache directories are writable
 
 Your teammate can focus on the frontend and user experience! 🚀
