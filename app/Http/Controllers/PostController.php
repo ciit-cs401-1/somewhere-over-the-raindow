@@ -7,9 +7,15 @@ use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -42,17 +48,18 @@ class PostController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'excerpt' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
             'status' => 'required|in:draft,published',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id'
         ]);
 
+        $slug = Str::slug($validated['title']);
+
         $post = Post::create([
             'title' => $validated['title'],
+            'slug' => $slug,
             'content' => $validated['content'],
-            'excerpt' => $validated['excerpt'],
             'category_id' => $validated['category_id'],
             'status' => $validated['status'],
             'user_id' => Auth::id()
@@ -95,17 +102,18 @@ class PostController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'excerpt' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
             'status' => 'required|in:draft,published',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id'
         ]);
 
+        $slug = Str::slug($validated['title']);
+
         $post->update([
             'title' => $validated['title'],
+            'slug' => $slug,
             'content' => $validated['content'],
-            'excerpt' => $validated['excerpt'],
             'category_id' => $validated['category_id'],
             'status' => $validated['status']
         ]);
