@@ -19,14 +19,30 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::with(['category', 'user', 'tags'])
-            ->published()
-            ->latest()
-            ->paginate(10);
+        $query = Post::with(['category', 'user', 'tags'])
+            ->published();
+
+        // Filter by category
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Filter by tags
+        if ($request->filled('tags')) {
+            $tagIds = $request->tags;
+            $query->whereHas('tags', function ($q) use ($tagIds) {
+                $q->whereIn('tags.id', $tagIds);
+            });
+        }
+
+        $posts = $query->latest()->paginate(10)->withQueryString();
+        
+        $categories = Category::all();
+        $tags = Tag::all();
             
-        return view('posts.index', compact('posts'));
+        return view('posts.index', compact('posts', 'categories', 'tags'));
     }
 
     /**
