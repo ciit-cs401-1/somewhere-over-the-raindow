@@ -13,7 +13,7 @@
         <!-- Swiper -->
         <div class="swiper-container hero-swiper">
             <div class="swiper-wrapper">
-                @foreach($posts->take(5) as $post) <!-- Limiting to 5 for the hero slider -->
+                @foreach($hot_posts as $post)
                 <div class="swiper-slide">
                     <div class="slide-background" style="background-image: url('{{ $post->featured_image ? asset('storage/' . $post->featured_image) : 'https://placehold.co/1600x900/34495e/ecf0f1?text=' . urlencode($post->category->name ?? 'Blog Post') }}');"></div>
                     <div class="slide-content">

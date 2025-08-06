@@ -37,12 +37,16 @@
                     </div>
                     @auth
                         <div class="post-actions" style="margin-top: 16px; display: flex; gap: 8px;">
-                            <a href="{{ route('tags.edit', $tag) }}" class="btn btn-warning" style="font-size: 12px; padding: 4px 8px;">Edit</a>
-                            <form action="{{ route('tags.destroy', $tag) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this tag?');">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-danger" style="font-size: 12px; padding: 4px 8px;">Delete</button>
-                            </form>
+                            @can('update', $tag)
+                                <a href="{{ route('tags.edit', $tag) }}" class="btn btn-warning" style="font-size: 12px; padding: 4px 8px;">Edit</a>
+                            @endcan
+                            @can('delete', $tag)
+                                <form action="{{ route('tags.destroy', $tag) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this tag?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-danger" style="font-size: 12px; padding: 4px 8px;">Delete</button>
+                                </form>
+                            @endcan
                         </div>
                     @endauth
                 </article>
