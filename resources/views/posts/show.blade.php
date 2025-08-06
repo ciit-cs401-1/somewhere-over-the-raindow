@@ -46,13 +46,44 @@
         </div>
 
         @auth
-            <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #30363d; display: flex; gap: 12px;">
-                <a href="{{ route('posts.edit', $post) }}" class="btn btn-warning">Edit Post</a>
-                <form action="{{ route('posts.destroy', $post) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this post?');">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-danger">Delete Post</button>
-                </form>
+            <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; gap: 12px;">
+                    @can('update', $post)
+                        <a href="{{ route('posts.edit', $post) }}" class="btn btn-warning">Edit Post</a>
+                    @endcan
+                    @can('delete', $post)
+                        <form action="{{ route('posts.destroy', $post) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this post?');">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger">Delete Post</button>
+                        </form>
+                    @endcan
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="color: #8b949e; font-size: 14px;">{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</span>
+                    @if ($post->likes()->where('user_id', Auth::id())->exists())
+                        <form action="{{ route('posts.unlike', $post) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-outline" style="display: flex; align-items: center; gap: 6px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                </svg>
+                                Unlike
+                            </button>
+                        </form>
+                    @else
+                        <form action="{{ route('posts.like', $post) }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-primary" style="display: flex; align-items: center; gap: 6px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-1.113 2.175-.229 4.878 2.458 7.372L8 14.014l.737-10.425c2.688-2.494 3.572-5.197 2.458-7.372C12.514.878 9.4.281 7.283 2.01L8 2.748zm0 1.518-1.01-1.038C4.93-1.43 1.022.52 0 3.133-1.022 5.746.936 8.25 4.796 11.01L8 13.502l3.204-2.492c3.86-2.76 5.818-5.266 4.796-7.879-1.022-2.613-4.93-4.563-6.213-2.585L8 4.266z"/>
+                                </svg>
+                                Like
+                            </button>
+                        </form>
+                    @endif
+                </div>
             </div>
         @endauth
     </div>

@@ -49,7 +49,12 @@
     <!-- Posts Header -->
     <div class="section-header">
         <h2 class="section-title">All Posts</h2>
-        <span class="view-all">{{ $posts->count() }} posts found</span>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            @auth
+                <a href="{{ route('posts.create') }}" class="btn btn-primary" style="text-decoration: none;">Create Post</a>
+            @endauth
+            <span class="view-all">{{ $posts->count() }} posts found</span>
+        </div>
     </div>
 
     @if($posts->count())
@@ -80,6 +85,31 @@
                                 </svg>
                                 {{ $post->views }}
                             </span>
+                            @auth
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span style="color: #8b949e; font-size: 14px;">{{ $post->likes->count() }}</span>
+                                    @if ($post->likes()->where('user_id', Auth::id())->exists())
+                                        <form action="{{ route('posts.unlike', $post) }}" method="POST" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none; cursor: pointer; color: #f85149;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <form action="{{ route('posts.like', $post) }}" method="POST" style="display: inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none; cursor: pointer; color: #8b949e;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-1.113 2.175-.229 4.878 2.458 7.372L8 14.014l.737-10.425c2.688-2.494 3.572-5.197 2.458-7.372C12.514.878 9.4.281 7.283 2.01L8 2.748zm0 1.518-1.01-1.038C4.93-1.43 1.022.52 0 3.133-1.022 5.746.936 8.25 4.796 11.01L8 13.502l3.204-2.492c3.86-2.76 5.818-5.266 4.796-7.879-1.022-2.613-4.93-4.563-6.213-2.585L8 4.266z"/>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                            @endauth
                         </div>
                         <div class="card-footer">
                             @if($post->tags->count() > 0)

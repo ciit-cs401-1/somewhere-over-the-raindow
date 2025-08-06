@@ -22,7 +22,7 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Post::with(['category', 'user', 'tags'])
+        $query = Post::with(['category', 'user', 'tags', 'likes'])
             ->published();
 
 
@@ -121,7 +121,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $post->load(['category', 'user', 'tags']);
+        $post->load(['category', 'user', 'tags', 'likes']);
         $post->increment('views');
         
         return view('posts.show', compact('post'));
@@ -143,6 +143,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        $this->authorize('update', $post);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
@@ -182,6 +183,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $this->authorize('delete', $post);
         $post->delete();
         
         return redirect()->route('posts.index')

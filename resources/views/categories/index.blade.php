@@ -5,10 +5,25 @@
 @section('content')
     <!-- Categories Header -->
     <div class="posts-header">
-        <h2>Categories</h2>
-        @auth
-        <a href="{{ route('categories.create') }}" class="btn btn-primary">Create New Category</a>
-        @endauth
+        <div class="posts-header-left">
+            @if (!$categories->onFirstPage())
+                <a href="{{ $categories->previousPageUrl() }}" class="nav-arrow" title="Previous Page">&laquo;</a>
+            @else
+                <span class="nav-arrow disabled">&laquo;</span>
+            @endif
+            <h2>Categories</h2>
+        </div>
+
+        <div class="posts-header-right">
+            @auth
+                <a href="{{ route('categories.create') }}" class="btn btn-primary">Create New Category</a>
+            @endauth
+            @if ($categories->hasMorePages())
+                <a href="{{ $categories->nextPageUrl() }}" class="nav-arrow" title="Next Page">&raquo;</a>
+            @else
+                <span class="nav-arrow disabled">&raquo;</span>
+            @endif
+        </div>
     </div>
 
     @if($categories->count())
@@ -37,10 +52,7 @@
             @endforeach
         </div>
 
-        <!-- Pagination -->
-        {{-- <div class="pagination">
-            {{ $categories->links() }}
-        </div> --}}
+
     @else
         <div class="alert alert-info">
             <p>No categories found.</p>

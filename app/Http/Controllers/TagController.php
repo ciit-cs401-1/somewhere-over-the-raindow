@@ -39,7 +39,11 @@ class TagController extends Controller
             'name' => 'required|string|max:255|unique:tags'
         ]);
 
-        Tag::create($validated);
+        $tag = Tag::create($validated);
+
+        if ($request->wantsJson()) {
+            return response()->json($tag);
+        }
 
         return redirect()->route('tags.index')
             ->with('success', 'Tag created successfully!');

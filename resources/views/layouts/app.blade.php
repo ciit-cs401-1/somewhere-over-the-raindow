@@ -331,7 +331,7 @@
                         <div class="dropdown">
                             <button class="btn btn-outline">{{ Auth::user()->name }}</button>
                             <div class="dropdown-content">
-                                <a href="{{ route('profile.edit') }}">Profile</a>
+                                <a href="{{ route('settings.index') }}">Settings</a>
                                 <div class="dropdown-divider"></div>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
@@ -370,6 +370,22 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Accordion for settings page
+            const triggers = document.querySelectorAll('.collapsible-trigger');
+            triggers.forEach(trigger => {
+                trigger.addEventListener('click', function() {
+                    const content = document.querySelector(this.dataset.target);
+                    if (content) {
+                        this.classList.toggle('active');
+                        content.classList.toggle('open');
+                        const icon = this.querySelector('.collapse-icon');
+                        if (icon) {
+                            icon.textContent = content.classList.contains('open') ? '−' : '+';
+                        }
+                    }
+                });
+            });
+
             const searchIcon = document.querySelector('.search-icon');
             const searchForm = document.querySelector('.search-form');
 

@@ -40,7 +40,11 @@ class CategoryController extends Controller
             'description' => 'nullable|string'
         ]);
 
-        Category::create($validated);
+        $category = Category::create($validated);
+
+        if ($request->wantsJson()) {
+            return response()->json($category);
+        }
 
         return redirect()->route('categories.index')
             ->with('success', 'Category created successfully!');
