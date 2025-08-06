@@ -7,20 +7,42 @@ use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::with(['category', 'user', 'tags'])
-            ->published()
-            ->latest()
-            ->paginate(10);
+        $query = Post::with(['category', 'user', 'tags'])
+            ->published();
+
+        // Filter by category
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Filter by tags
+        if ($request->filled('tags')) {
+            $tagIds = $request->tags;
+            $query->whereHas('tags', function ($q) use ($tagIds) {
+                $q->whereIn('tags.id', $tagIds);
+            });
+        }
+
+        $posts = $query->latest()->paginate(10)->withQueryString();
+        
+        $categories = Category::all();
+        $tags = Tag::all();
             
-        return view('posts.index', compact('posts'));
+        return view('posts.index', compact('posts', 'categories', 'tags'));
     }
 
     /**
@@ -42,17 +64,18 @@ class PostController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'excerpt' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
             'status' => 'required|in:draft,published',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id'
         ]);
 
+        $slug = Str::slug($validated['title']);
+
         $post = Post::create([
             'title' => $validated['title'],
+            'slug' => $slug,
             'content' => $validated['content'],
-            'excerpt' => $validated['excerpt'],
             'category_id' => $validated['category_id'],
             'status' => $validated['status'],
             'user_id' => Auth::id()
@@ -95,17 +118,18 @@ class PostController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'excerpt' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
             'status' => 'required|in:draft,published',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id'
         ]);
 
+        $slug = Str::slug($validated['title']);
+
         $post->update([
             'title' => $validated['title'],
+            'slug' => $slug,
             'content' => $validated['content'],
-            'excerpt' => $validated['excerpt'],
             'category_id' => $validated['category_id'],
             'status' => $validated['status']
         ]);
