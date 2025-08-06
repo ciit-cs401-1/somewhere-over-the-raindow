@@ -24,13 +24,21 @@ class Tag extends Model
     /**
      * Generate slug from name
      */
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($tag) {
             if (empty($tag->slug)) {
-                $tag->slug = Str::slug($tag->name);
+                $slug = Str::slug($tag->name);
+                $originalSlug = $slug;
+                $count = 2;
+
+                while (static::where('slug', $slug)->exists()) {
+                    $slug = "{$originalSlug}-" . $count++;
+                }
+
+                $tag->slug = $slug;
             }
         });
     }

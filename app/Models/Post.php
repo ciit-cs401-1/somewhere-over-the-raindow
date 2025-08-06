@@ -49,6 +49,14 @@ class Post extends Model
     }
 
     /**
+     * Get the likes for the post.
+     */
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    /**
      * Generate slug from title
      */
     public static function boot()

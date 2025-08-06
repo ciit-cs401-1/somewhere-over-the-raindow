@@ -5,10 +5,25 @@
 @section('content')
     <!-- Tags Header -->
     <div class="posts-header">
-        <h2>Tags</h2>
-        @auth
-        <a href="{{ route('tags.create') }}" class="btn btn-primary">Create New Tag</a>
-        @endauth
+        <div class="posts-header-left">
+            @if (!$tags->onFirstPage())
+                <a href="{{ $tags->previousPageUrl() }}" class="nav-arrow" title="Previous Page">&laquo;</a>
+            @else
+                <span class="nav-arrow disabled">&laquo;</span>
+            @endif
+            <h2>Tags</h2>
+        </div>
+
+        <div class="posts-header-right">
+            @auth
+                <a href="{{ route('tags.create') }}" class="btn btn-primary">Create New Tag</a>
+            @endauth
+            @if ($tags->hasMorePages())
+                <a href="{{ $tags->nextPageUrl() }}" class="nav-arrow" title="Next Page">&raquo;</a>
+            @else
+                <span class="nav-arrow disabled">&raquo;</span>
+            @endif
+        </div>
     </div>
 
     @if($tags->count())
@@ -34,10 +49,7 @@
             @endforeach
         </div>
 
-        <!-- Pagination -->
-        {{-- <div class="pagination">
-            {{ $tags->links() }}
-        </div> --}}
+
     @else
         <div class="post-card">
             <p>No tags found.</p>

@@ -25,13 +25,21 @@ class Category extends Model
     /**
      * Generate slug from name
      */
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($category) {
             if (empty($category->slug)) {
-                $category->slug = Str::slug($category->name);
+                $slug = Str::slug($category->name);
+                $originalSlug = $slug;
+                $count = 2;
+
+                while (static::where('slug', $slug)->exists()) {
+                    $slug = "{$originalSlug}-" . $count++;
+                }
+
+                $category->slug = $slug;
             }
         });
     }
