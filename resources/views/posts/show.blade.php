@@ -3,7 +3,7 @@
 @section('title', $post->title)
 
 @section('content')
-    <div class="form-container">
+    <div class="post-card">
         <div style="margin-bottom: 24px;">
             <a href="{{ route('posts.index') }}" class="btn btn-outline">← Back to Posts</a>
         </div>
@@ -14,12 +14,19 @@
             <img src="{{ asset('storage/' . $post->featured_image) }}" alt="Featured Image" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 24px;">
         @endif
 
-        <div style="margin-bottom: 24px;">
+        <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 16px;">
             @if($post->category)
-                <a href="{{ route('posts.index', ['category_id' => $post->category->id]) }}" class="post-category">
-                    {{ $post->category->name }}
+                <a href="{{ route('posts.index', ['category_id' => $post->category->id]) }}" class="post-category category-{{ strtolower(str_replace(' ', '-', $post->category->name ?? 'general')) }}">
+                    {{ strtoupper($post->category->name) }}
                 </a>
             @endif
+            <span style="color: #8b949e; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                </svg>
+                {{ $post->views }} {{ Str::plural('view', $post->views) }}
+            </span>
         </div>
 
         @if($post->tags->count() > 0)

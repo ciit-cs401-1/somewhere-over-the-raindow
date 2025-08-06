@@ -8,12 +8,13 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('auth')->except(['index', 'show', 'search']);
     }
 
     /**
@@ -23,6 +24,8 @@ class PostController extends Controller
     {
         $query = Post::with(['category', 'user', 'tags'])
             ->published();
+
+
 
         // Filter by category
         if ($request->filled('category_id')) {
@@ -43,6 +46,29 @@ class PostController extends Controller
         $tags = Tag::all();
             
         return view('posts.index', compact('posts', 'categories', 'tags'));
+    }
+
+    /**
+     * Display search results.
+     */
+    public function search(Request $request)
+    {
+        $request->validate([
+            'search' => 'required|string|max:255',
+        ]);
+
+        $searchTerm = $request->search;
+
+        $query = Post::with(['category', 'user', 'tags'])
+            ->published()
+            ->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', "%{$searchTerm}%")
+                  ->orWhere('content', 'like', "%{$searchTerm}%");
+            });
+
+        $posts = $query->latest()->paginate(10)->withQueryString();
+
+        return view('posts.search', compact('posts'));
     }
 
     /**
@@ -67,19 +93,20 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'status' => 'required|in:draft,published',
             'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id'
+            'tags.*' => 'exists:tags,id',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $slug = Str::slug($validated['title']);
+        $data = $validated;
+        $data['slug'] = Str::slug($validated['title']);
+        $data['user_id'] = Auth::id();
 
-        $post = Post::create([
-            'title' => $validated['title'],
-            'slug' => $slug,
-            'content' => $validated['content'],
-            'category_id' => $validated['category_id'],
-            'status' => $validated['status'],
-            'user_id' => Auth::id()
-        ]);
+        if ($request->hasFile('featured_image')) {
+            $path = $request->file('featured_image')->store('featured_images', 'public');
+            $data['featured_image'] = $path;
+        }
+
+        $post = Post::create($data);
 
         if (isset($validated['tags'])) {
             $post->tags()->attach($validated['tags']);
@@ -95,6 +122,7 @@ class PostController extends Controller
     public function show(Post $post)
     {
         $post->load(['category', 'user', 'tags']);
+        $post->increment('views');
         
         return view('posts.show', compact('post'));
     }
@@ -121,18 +149,23 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'status' => 'required|in:draft,published',
             'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id'
+            'tags.*' => 'exists:tags,id',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $slug = Str::slug($validated['title']);
+        $data = $validated;
+        $data['slug'] = Str::slug($validated['title']);
 
-        $post->update([
-            'title' => $validated['title'],
-            'slug' => $slug,
-            'content' => $validated['content'],
-            'category_id' => $validated['category_id'],
-            'status' => $validated['status']
-        ]);
+        if ($request->hasFile('featured_image')) {
+            // Delete old image if it exists
+            if ($post->featured_image) {
+                Storage::disk('public')->delete($post->featured_image);
+            }
+            $path = $request->file('featured_image')->store('featured_images', 'public');
+            $data['featured_image'] = $path;
+        }
+
+        $post->update($data);
 
         if (isset($validated['tags'])) {
             $post->tags()->sync($validated['tags']);

@@ -14,26 +14,14 @@ class TagSeeder extends Seeder
     public function run(): void
     {
         $tags = [
-            'Laravel',
-            'PHP',
-            'JavaScript',
-            'Vue.js',
-            'React',
-            'CSS',
-            'HTML',
-            'Database',
-            'API',
-            'Web Development',
-            'Mobile Development',
-            'UI/UX',
-            'Testing',
-            'Deployment',
-            'Docker',
-            'Git',
-            'Agile',
-            'Startup',
-            'Marketing',
-            'SEO'
+            // Technology
+            'Laravel', 'PHP', 'JavaScript', 'Web Development', 'UI/UX',
+
+            // Business
+            'Business', 'Startup', 'Marketing', 'SEO', 'Productivity', 'Finance', 'Career', 'Leadership',
+
+            // Lifestyle
+            'Lifestyle', 'Travel', 'Health', 'Wellness', 'Food', 'Fashion', 'DIY'
         ];
 
         foreach ($tags as $tagName) {
