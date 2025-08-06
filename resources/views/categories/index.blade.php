@@ -15,12 +15,12 @@
         <!-- Categories Grid -->
         <div class="posts-grid">
             @foreach($categories as $category)
-                <article class="post-card">
+                <article class="post-card category-card category-{{ strtolower(str_replace(' ', '-', $category->name ?? 'general')) }}">
                     <h3 class="post-title">{{ $category->name }}</h3>
                     <div class="post-meta">
                         <span class="post-views">{{ $category->posts_count ?? $category->posts->count() }} posts</span>
                     </div>
-                    <div style="color: #8b949e; font-size: 14px; line-height: 1.5;">
+                    <div class="category-description">
                         {{ $category->description }}
                     </div>
                     @auth
@@ -38,9 +38,9 @@
         </div>
 
         <!-- Pagination -->
-        <div class="pagination">
+        {{-- <div class="pagination">
             {{ $categories->links() }}
-        </div>
+        </div> --}}
     @else
         <div class="alert alert-info">
             <p>No categories found.</p>
@@ -52,4 +52,43 @@
             To create, edit, or delete categories, <a href="{{ route('login') }}">log in</a> or <a href="{{ route('register') }}">register</a>.
         </div>
     @endif
-@endsection 
+<style>
+    .category-card .post-title,
+    .category-card .post-meta,
+    .category-card .category-description {
+        color: var(--white) !important;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .category-card .post-title {
+        font-size: 1.75rem;
+    }
+
+    .category-card .category-description {
+        color: rgba(255, 255, 255, 0.85) !important;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+</style>
+
+@endsection
+
+@push('styles')
+<style>
+    .category-business {
+        background: #8e44ad !important; /* Purple */
+    }
+    .category-travel {
+        background: #3498db !important; /* Blue */
+    }
+    .category-card .post-title,
+    .category-card .post-meta,
+    .category-card .category-description {
+        color: var(--white) !important;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+    .category-card .category-description {
+        color: rgba(255, 255, 255, 0.85) !important;
+    }
+</style>
+@endpush 

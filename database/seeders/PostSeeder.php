@@ -23,11 +23,25 @@ class PostSeeder extends Seeder
         $technologyCategory = Category::where('name', 'Technology')->first();
         $travelCategory = Category::where('name', 'Travel')->first();
         $foodCategory = Category::where('name', 'Food')->first();
+        $lifestyleCategory = Category::where('name', 'Lifestyle')->first();
+        $businessCategory = Category::where('name', 'Business')->first();
         
+        // Fetching tags by name to get their IDs
         $laravelTag = Tag::where('name', 'Laravel')->first();
         $phpTag = Tag::where('name', 'PHP')->first();
         $javascriptTag = Tag::where('name', 'JavaScript')->first();
         $webDevTag = Tag::where('name', 'Web Development')->first();
+        $businessTag = Tag::where('name', 'Business')->first();
+        $startupTag = Tag::where('name', 'Startup')->first();
+        $productivityTag = Tag::where('name', 'Productivity')->first();
+        $careerTag = Tag::where('name', 'Career')->first();
+        $lifestyleTag = Tag::where('name', 'Lifestyle')->first();
+        $travelTag = Tag::where('name', 'Travel')->first();
+        $healthTag = Tag::where('name', 'Health')->first();
+        $foodTag = Tag::where('name', 'Food')->first();
+        $leadershipTag = Tag::where('name', 'Leadership')->first();
+        $wellnessTag = Tag::where('name', 'Wellness')->first();
+        $diyTag = Tag::where('name', 'DIY')->first();
 
         $posts = [
             [
@@ -52,7 +66,7 @@ class PostSeeder extends Seeder
                 'excerpt' => 'Explore the top travel destinations for your next adventure.',
                 'category_id' => $travelCategory->id,
                 'status' => 'published',
-                'tags' => []
+                'tags' => [$travelTag->id, $lifestyleTag->id]
             ],
             [
                 'title' => 'Quick and Easy Recipes',
@@ -60,7 +74,39 @@ class PostSeeder extends Seeder
                 'excerpt' => 'Simple recipes for delicious homemade meals.',
                 'category_id' => $foodCategory->id,
                 'status' => 'published',
-                'tags' => []
+                'tags' => [$foodTag->id, $healthTag->id, $lifestyleTag->id]
+            ],
+            [
+                'title' => '10 Tips for a Healthier Lifestyle',
+                'content' => 'Living a healthier lifestyle doesn\'t have to be hard. With a few simple changes to your daily routine, you can improve your physical and mental well-being. This guide provides ten actionable tips to get you started on your journey to a healthier you.',
+                'excerpt' => 'Discover ten simple tips to improve your daily health and well-being.',
+                'category_id' => $lifestyleCategory->id,
+                'status' => 'published',
+                'tags' => [$healthTag->id, $lifestyleTag->id, $productivityTag->id]
+            ],
+            [
+                'title' => 'The Future of Remote Work',
+                'content' => 'Remote work is here to stay. This article explores the trends shaping the future of remote work, the benefits and challenges for both employers and employees, and how companies can build a thriving remote culture. Prepare your business for the new era of work.',
+                'excerpt' => 'An in-depth look at the trends and strategies shaping the future of remote work.',
+                'category_id' => $businessCategory->id,
+                'status' => 'published',
+                'tags' => [$businessTag->id, $careerTag->id, $productivityTag->id, $startupTag->id]
+            ],
+            [
+                'title' => 'Mastering the Art of Negotiation',
+                'content' => 'Negotiation is a key skill in both business and life. This guide covers the fundamental principles of effective negotiation, from preparation to closing the deal. Learn how to create win-win situations and achieve your goals with confidence.',
+                'excerpt' => 'Learn the essential skills for successful negotiation in any situation.',
+                'category_id' => $businessCategory->id,
+                'status' => 'published',
+                'tags' => [$businessTag->id, $careerTag->id, $leadershipTag->id, $productivityTag->id]
+            ],
+            [
+                'title' => 'A Guide to Minimalist Living',
+                'content' => 'Minimalism is about more than just decluttering; it\'s a mindset that can lead to a more intentional and fulfilling life. This guide explores the benefits of minimalism and provides practical steps to help you simplify your space, finances, and daily routines.',
+                'excerpt' => 'Discover how to embrace minimalism for a simpler, more intentional life.',
+                'category_id' => $lifestyleCategory->id,
+                'status' => 'published',
+                'tags' => [$lifestyleTag->id, $healthTag->id, $wellnessTag->id, $diyTag->id]
             ]
         ];
 

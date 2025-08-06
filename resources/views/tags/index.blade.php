@@ -35,9 +35,9 @@
         </div>
 
         <!-- Pagination -->
-        <div class="pagination">
+        {{-- <div class="pagination">
             {{ $tags->links() }}
-        </div>
+        </div> --}}
     @else
         <div class="post-card">
             <p>No tags found.</p>

@@ -7,152 +7,37 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@400;700&display=swap" rel="stylesheet">
+
+        <!-- SwiperJS CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
         <!-- Modern Blog Design CSS -->
         <style>
-            /* Color palette from the word cloud image */
+            /* --- Base and Variables --- */
             :root {
-                --brown-dark: #4e342e;
-                --brown: #6d4c41;
-                --brown-medium: #a1887f;
-                --beige: #f5f5dc;
-                --cream: #fff8e1;
-                --yellow: #ffe082;
-                --yellow-muted: #e6d97a;
-                --blue: #7fa7c7;
-                --blue-light: #b3cde3;
-                --green: #bfcf8c;
-                --gray: #bdbdbd;
-                --gray-dark: #757575;
+                --primary-dark: #2c3e50;  /* Deep blue-gray */
+                --primary: #34495e;       /* Medium blue-gray */
+                --primary-light: #7f8c8d; /* Light blue-gray */
+                --accent: #3498db;        /* Bright blue */
+                --accent-light: #85c1e9;  /* Light blue */
+                --brown-dark: #3e2723;     /* Dark Brown */
+                --brown-light: #4d3622;    /* Lighter Brown */
+                --text-light: #f5f5dc;     /* Beige/Off-white */
+                --text-accent: #ffe082;    /* Light Yellow */
+                --white: #ffffff;
             }
 
-            body, .main-content {
-                color: var(--brown-dark);
-            }
-
-            .header, .category-nav {
-                background: rgba(245, 245, 220, 0.95); /* beige/cream */
-                color: var(--brown-dark);
-                border-bottom: 1.5px solid var(--brown-medium);
-            }
-            .header .logo {
-                color: var(--brown-dark);
-            }
-            .header .logo-icon {
-                background: var(--gray);
-                color: var(--brown-dark);
-            }
-            .nav-links a {
-                color: var(--brown-dark);
-            }
-            .nav-links a.active, .nav-links a:hover {
-                color: var(--yellow);
-                background: rgba(255, 224, 130, 0.12);
-            }
-            .nav-right .btn-outline {
-                color: var(--blue);
-                border-color: var(--blue);
-                background: transparent;
-            }
-            .nav-right .btn-outline:hover {
-                background: var(--blue);
-                color: var(--cream);
-            }
-            .nav-right .btn-primary {
-                background: var(--yellow);
-                color: var(--brown-dark);
-                border-color: var(--yellow);
-            }
-            .nav-right .btn-primary:hover {
-                background: var(--yellow-muted);
-                color: var(--brown-dark);
-                border-color: var(--yellow);
-            }
-            .category-list a {
-                color: var(--brown-dark);
-            }
-            .category-list a.active, .category-list a:hover {
-                color: var(--blue);
-                border-bottom-color: var(--blue);
-            }
-
-            /* Card and filter backgrounds */
-            .post-card, .filters {
-                background: rgba(245, 245, 220, 0.7); /* semi-transparent beige */
-                border: 1.5px solid var(--brown-medium);
-                color: var(--brown-dark);
-            }
-            .post-card:hover, .filters:focus-within {
-                background: rgba(255, 248, 225, 0.9);
-                border-color: var(--yellow);
-            }
-            .filters h3, .filters label, .filters .btn, .filters .filter-select, .filters .selected-tags, .filters .tag-label {
-                color: var(--brown-dark) !important;
-            }
-
-            /* Headings */
-            .section-title, .featured-title, .post-title {
-                color: var(--brown-dark);
-            }
-            .featured-category, .post-category {
-                color: var(--green);
-                background: rgba(191, 207, 140, 0.18);
-                border-radius: 8px;
-                padding: 2px 10px;
-                font-weight: 600;
-                font-size: 13px;
-                display: inline-block;
-                margin-bottom: 8px;
-            }
-            /* Tag/label colors */
-            .tag-label {
-                color: var(--blue);
-                background: rgba(127, 167, 199, 0.15);
-                border-radius: 8px;
-                padding: 2px 8px;
-                font-size: 13px;
-                margin-right: 4px;
-            }
-            /* Button colors */
-            .btn {
-                font-weight: 600;
-                border-radius: 6px;
-                border: 1.5px solid var(--brown-medium);
-                background: var(--yellow);
-                color: var(--brown-dark);
-                transition: background 0.2s, color 0.2s;
-            }
-            .btn:hover {
-                background: var(--blue);
-                color: var(--cream);
-                border-color: var(--blue);
-            }
-            /* Pagination */
-            .pagination a, .pagination span {
-                background: rgba(245, 245, 220, 0.7);
-                color: var(--brown-dark);
-                border: 1.5px solid var(--brown-medium);
-            }
-            .pagination a:hover, .pagination .current {
-                background: var(--yellow);
-                color: var(--brown-dark);
-                border-color: var(--yellow);
-            }
-            /* Misc */
-            .post-meta, .post-views {
-                color: var(--gray-dark);
-            }
-            .multi-select-display, .multi-select-options {
-                background: rgba(245, 245, 220, 0.7) !important;
-                color: var(--brown-dark) !important;
-                border: 1.5px solid var(--brown-medium) !important;
-            }
             * {
                 margin: 0;
                 padding: 0;
@@ -160,7 +45,7 @@
             }
 
             body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+                font-family: 'Merienda', cursive;
                 background-color: #ffffff;
                 color: #1a1a1a;
                 line-height: 1.6;
@@ -168,15 +53,15 @@
                 min-height: 100vh;
             }
 
-            /* Header */
+            /* --- Layout: Header, Nav, Main --- */
             .header {
                 background: rgba(77, 54, 34, 0.97); /* warm brown */
-                border-bottom: 1px solid #3e2723;
+                border-bottom: 1px solid var(--brown-dark);
                 padding: 20px 0;
                 position: sticky;
                 top: 0;
                 z-index: 100;
-                color: #f5f5dc;
+                color: var(--text-light);
                 box-shadow: 0 2px 8px rgba(77,54,34,0.08);
             }
 
@@ -189,347 +74,113 @@
                 justify-content: space-between;
             }
 
-            .logo {
-                font-size: 28px;
-                font-weight: 700;
-                color: #fff8e1;
-                text-decoration: none;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-
-            .logo-icon {
-                width: 32px;
-                height: 32px;
-                background: #bcaaa4;
-                border-radius: 8px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #4e342e;
-                font-weight: bold;
-                font-size: 18px;
-            }
-
-            .nav-right {
-                display: flex;
-                align-items: center;
-                gap: 24px;
-            }
-
-            .nav-links {
-                display: flex;
-                gap: 32px;
-                list-style: none;
-            }
-
-            .nav-links a {
-                color: #f5f5dc;
-                text-decoration: none;
-                font-weight: 500;
-                font-size: 14px;
-                transition: color 0.2s ease;
-            }
-            .nav-links a.active, .nav-links a:hover {
-                color: #ffe082;
-                background: rgba(255,248,225,0.08);
-            }
-
-            .nav-links a:hover {
-                color: #1a1a1a;
-            }
-
-            .search-icon {
-                width: 20px;
-                height: 20px;
-                color: #666;
-                cursor: pointer;
-            }
-
-            .btn {
-                padding: 12px 24px;
-                border-radius: 6px;
-                text-decoration: none;
-                font-weight: 600;
-                font-size: 14px;
-                transition: all 0.2s ease;
-                border: 2px solid #1a1a1a;
-                cursor: pointer;
-                display: inline-block;
-            }
-
-            .btn-outline {
-                color: #1a1a1a;
-                background: transparent;
-            }
-
-            .btn-outline:hover {
-                background-color: #1a1a1a;
-                color: #ffffff;
-            }
-
-            .btn-primary {
-                background-color: #1a1a1a;
-                color: #ffffff;
-                border-color: #1a1a1a;
-            }
-
-            .btn-primary:hover {
-                background-color: #333;
-                border-color: #333;
-            }
-
-            /* Category Navigation */
             .category-nav {
                 background: rgba(77, 54, 34, 0.95);
-                border-bottom: 1px solid #3e2723;
+                border-bottom: 1px solid var(--brown-dark);
                 padding: 16px 0;
                 overflow-x: auto;
-                color: #f5f5dc;
             }
 
-            .category-container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 0 20px;
-            }
-
-            .category-list {
-                display: flex;
-                gap: 32px;
-                list-style: none;
-                white-space: nowrap;
-            }
-
-            .category-list a {
-                color: #f5f5dc;
-                text-decoration: none;
-                font-weight: 500;
-                font-size: 14px;
-                transition: color 0.2s ease;
-                padding: 8px 0;
-                border-bottom: 2px solid transparent;
-            }
-            .category-list a.active, .category-list a:hover {
-                color: #ffe082;
-                border-bottom-color: #ffe082;
-            }
-
-            /* Main Container - Full Screen Dark Background */
             .main-content {
                 background: 
                     linear-gradient(rgba(20, 20, 20, 0.7), rgba(20, 20, 20, 0.7)),
                     url('/blog-wallpaper.jpg') center center / cover no-repeat;
                 min-height: calc(100vh - 140px);
-                color: #e6edf3;
-                width: 100%;
-                position: relative;
-                overflow: hidden;
+                color: var(--text-light);
+                padding: 2rem;
             }
 
-            .main-content::before,
-            .main-content::after {
-                display: none !important;
-            }
+            /* --- Components --- */
 
-            /* Featured Section */
-            .featured-section {
-                margin-bottom: 60px;
-                padding: 40px 20px;
-                width: 100%;
-                position: relative;
-                z-index: 1;
-            }
-
-            .section-header {
+            /* Logo */
+            .logo {
                 display: flex;
-                justify-content: space-between;
                 align-items: center;
-                margin-bottom: 32px;
-                width: 100%;
-                position: relative;
-                z-index: 2;
-            }
-
-            .section-title {
-                font-size: 32px;
-                font-weight: 700;
-                color: #f0f6fc;
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            }
-
-            .view-all {
-                color: #8b949e;
+                gap: 12px;
                 text-decoration: none;
-                font-weight: 500;
-                font-size: 14px;
-                transition: color 0.3s ease;
+                transition: transform 0.2s ease-in-out;
             }
+            .logo:hover { transform: scale(1.03); }
+            .logo-text { font-family: 'Merienda', cursive; font-size: 28px; font-weight: 700; color: var(--text-light); }
+            .logo-icon { width: 45px; height: 45px; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-family: 'Merienda', cursive; font-weight: 700; font-size: 18px; }
 
-            .view-all:hover {
-                color: #f0f6fc;
-            }
+            /* Navigation */
+            .nav-right { display: flex; align-items: center; gap: 24px; }
+            .nav-links { display: flex; gap: 32px; list-style: none; }
+            .nav-links a { color: var(--text-light); text-decoration: none; font-weight: 500; font-size: 14px; transition: color 0.2s ease; }
+            .nav-links a.active, .nav-links a:hover { color: var(--text-accent); }
 
-            .featured-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 32px;
-                align-items: start;
-                width: 100%;
-                position: relative;
-                z-index: 2;
-            }
+            /* Category Tabs */
+            .category-list { display: flex; gap: 32px; list-style: none; white-space: nowrap; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+            .category-list a { color: var(--text-light); text-decoration: none; font-weight: 500; font-size: 14px; transition: all 0.2s ease; padding: 8px 0; border-bottom: 2px solid transparent; }
+            .category-list a.active, .category-list a:hover { color: var(--text-accent); border-bottom-color: var(--text-accent); }
 
-            .featured-main {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                border-radius: 16px;
-                padding: 40px;
-                color: white;
-                position: relative;
-                overflow: hidden;
-                min-height: 400px;
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-end;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-                backdrop-filter: blur(10px);
-            }
+            /* Search */
+            .search-icon { width: 24px; height: 24px; color: var(--text-light); cursor: pointer; transition: color 0.3s ease; }
+            .search-icon:hover { color: var(--text-accent); }
+            .search-form { position: relative; transition: all 0.3s ease; }
+            .search-form.hidden { width: 0; opacity: 0; overflow: hidden; }
+            .search-input { border: 1.5px solid var(--primary-light); border-radius: 20px; padding: 8px 16px; background: rgba(255, 255, 255, 0.1); color: var(--text-light); width: 200px; transition: all 0.3s ease; }
+            .search-input::placeholder { color: var(--primary-light); }
+            .search-input:focus { outline: none; border-color: var(--text-accent); background: rgba(255, 255, 255, 0.2); }
 
-            .featured-main::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: 
-                    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                    radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-                opacity: 0.6;
-            }
+            /* Buttons & Dropdown */
+            .btn { padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.2s ease; border: 2px solid var(--text-light); cursor: pointer; display: inline-block; }
+            .btn-outline { color: var(--text-light); background: transparent; }
+            .btn-outline:hover { background-color: var(--text-light); color: var(--brown-dark); }
+            .btn-primary { background-color: var(--text-light); color: var(--brown-dark); border-color: var(--text-light); }
+            .btn-primary:hover { background-color: var(--text-accent); border-color: var(--text-accent); }
+            .dropdown { position: relative; display: inline-block; }
+            .dropdown-content { display: none; position: absolute; right: 0; background-color: var(--brown-dark); min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; border-radius: 6px; overflow: hidden; }
+            .dropdown:hover .dropdown-content { display: block; }
+            .dropdown-content a, .dropdown-content button { color: var(--text-light); padding: 12px 16px; text-decoration: none; display: block; text-align: left; background: none; border: none; width: 100%; cursor: pointer; }
+            .dropdown-content a:hover, .dropdown-content button:hover { background-color: var(--brown-light); }
+            .dropdown-divider { height: 1px; margin: 4px 0; background-color: var(--brown-light); }
 
-            .featured-category {
-                font-size: 12px;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                margin-bottom: 16px;
-                opacity: 0.9;
-            }
+            /* Section Header */
+            .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid rgba(245,245,220,0.15); }
+            .section-title { font-size: 28px; font-weight: 700; color: var(--text-light); }
+            .view-all { font-size: 14px; color: var(--text-accent); text-decoration: none; font-weight: 500; }
 
-            .featured-title {
-                font-size: 28px;
-                font-weight: 700;
-                margin-bottom: 16px;
-                line-height: 1.2;
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            }
+            /* Posts Grid & Cards */
+            .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+            .post-card { background: rgba(77, 54, 34, 0.35); border: 1.5px solid rgba(62, 39, 35, 0.5); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; backdrop-filter: blur(18px); display: flex; flex-direction: column; }
+            .post-card:hover { transform: translateY(-8px); box-shadow: 0 12px 24px rgba(0,0,0,0.25); border-color: rgba(255,224,130,0.6); }
+            .post-image-link { display: block; }
+            .post-image { width: 100%; height: 200px; object-fit: cover; transition: transform 0.4s ease; }
+            .post-card:hover .post-image { transform: scale(1.08); }
+            .post-content { padding: 24px; display: flex; flex-direction: column; flex-grow: 1; }
+            .post-category { font-weight: 500; font-size: 12px; color: var(--text-accent); background: rgba(255,224,130,0.1); padding: 4px 12px; border-radius: 16px; display: inline-block; margin-bottom: 12px; }
+            .post-title { font-size: 20px; font-weight: 600; margin-bottom: 12px; line-height: 1.4; }
+            .post-title a { color: var(--text-light); text-decoration: none; }
+            .card-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(245,245,220,0.1); }
+            .post-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+            .tag-label { font-size: 12px; padding: 4px 10px; border-radius: 14px; background: rgba(245,245,220,0.1); color: var(--text-accent); }
 
-            .featured-description {
-                font-size: 16px;
-                opacity: 0.9;
-                line-height: 1.5;
-            }
+            /* Pagination */
+            .pagination { margin-top: 40px; display: flex; justify-content: center; }
+            .pagination a, .pagination span { color: var(--text-light); padding: 10px 16px; margin: 0 4px; border: 1px solid rgba(245,245,220,0.2); border-radius: 6px; text-decoration: none; transition: all 0.2s ease; }
+            .pagination a:hover, .pagination .current { background: var(--text-accent); color: var(--brown-dark); border-color: var(--text-accent); }
 
-            .featured-sidebar {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 24px;
-            }
+            /* Hero Slider */
+            .hero-slider-container { width: 100%; height: 500px; margin-bottom: 3rem; }
+            .hero-swiper { width: 100%; height: 100%; }
+            .swiper-slide { position: relative; overflow: hidden; border-radius: 15px; }
+            .slide-background { width: 100%; height: 100%; background-size: cover; background-position: center; transition: transform 0.4s ease-in-out; }
+            .swiper-slide-active .slide-background { transform: scale(1.05); }
+            .slide-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; padding: 2rem 4rem; background: linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%); }
+            .info-box { background: rgba(77, 54, 34, 0.6); backdrop-filter: blur(10px); padding: 2rem; border-radius: 15px; max-width: 450px; border: 1px solid rgba(245,245,220,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+            .slide-title { font-size: 2rem; font-weight: 700; color: var(--text-light); margin: 1rem 0; }
+            .slide-excerpt { font-size: 1rem; color: var(--text-light); margin-bottom: 1.5rem; }
+            .swiper-button-next, .swiper-button-prev { color: var(--white); }
+            .swiper-pagination-bullet-active { background: var(--white); }
 
-            /* Post Cards */
-            .post-card {
-                background: rgba(77, 54, 34, 0.35); /* more transparent brown */
-                border: 1.5px solid rgba(62, 39, 35, 0.5);
-                border-radius: 12px;
-                overflow: hidden;
-                transition: all 0.3s ease;
-                cursor: pointer;
-                backdrop-filter: blur(18px);
-                position: relative;
-                z-index: 2;
-                color: #f5f5dc;
-            }
-
-            .post-card:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 12px 24px rgba(77, 54, 34, 0.18);
-                border-color: #a1887f;
-                background: rgba(77, 54, 34, 0.5);
-            }
-
-            .post-title, .post-category, .post-meta, .post-views {
-                color: #f5f5dc;
-            }
-
-            .post-image {
-                width: 100%;
-                height: 200px;
-                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                position: relative;
-                overflow: hidden;
-            }
-
-            .post-image::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: 
-                    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
-            }
-
-            .post-content {
-                padding: 24px;
-            }
-
-            .post-category {
-                font-size: 12px;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                color: #8b949e;
-                margin-bottom: 12px;
-            }
-
-            .post-title {
-                font-size: 18px;
-                font-weight: 600;
-                color: #f0f6fc;
-                margin-bottom: 8px;
-                line-height: 1.3;
-            }
-
-            .post-meta {
-                display: flex;
-                align-items: center;
-                gap: 16px;
-                margin-top: 16px;
-                font-size: 14px;
-                color: #8b949e;
-            }
-
-            .post-views {
-                display: flex;
-                align-items: center;
-                gap: 4px;
-            }
-
-            /* Posts Grid */
-            .posts-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-                gap: 32px;
-                margin-top: 40px;
-                padding: 0 20px;
-                width: 100%;
-                position: relative;
-                z-index: 2;
-            }
+            /* Category-specific Colors */
+            .category-technology { background: #27ae60; color: white; }
+            .category-business { background: #8e44ad; color: white; }
+            .category-travel { background: #3498db; color: white; }
+            .category-food { background: #e67e22; color: white; }
+            .category-lifestyle { background: #e74c3c; color: white; }
 
             /* Filters */
             .filters {
@@ -615,39 +266,7 @@
                 text-decoration: underline;
             }
 
-            /* Pagination */
-            .pagination {
-                display: flex;
-                justify-content: center;
-                gap: 8px;
-                margin-top: 40px;
-                width: 100%;
-                position: relative;
-                z-index: 2;
-            }
 
-            .pagination a,
-            .pagination span {
-                padding: 12px 16px;
-                border: 1px solid rgba(48, 54, 61, 0.5);
-                border-radius: 6px;
-                color: #8b949e;
-                text-decoration: none;
-                transition: all 0.2s ease;
-                backdrop-filter: blur(10px);
-                background: rgba(22, 27, 34, 0.8);
-            }
-
-            .pagination a:hover {
-                background-color: rgba(33, 38, 45, 0.8);
-                border-color: rgba(139, 148, 158, 0.8);
-            }
-
-            .pagination .current {
-                background-color: #667eea;
-                border-color: #667eea;
-                color: #ffffff;
-            }
 
             /* Responsive */
             @media (max-width: 768px) {
@@ -680,23 +299,21 @@
                     font-size: 24px;
                 }
 
-                .filters {
-                    margin: 40px 16px;
-                }
 
                 .alert {
                     margin: 0 16px 24px 16px;
                 }
             }
         </style>
+        @stack('styles')
     </head>
     <body>
         <!-- Header -->
         <header class="header">
             <div class="header-container">
                 <a href="{{ route('posts.index') }}" class="logo">
-                    <div class="logo-icon">D</div>
-                    DevBlog
+                    <div class="logo-icon">CX</div>
+                    <span class="logo-text">CoxBlog</span>
                 </a>
                 <div class="nav-right">
                     <ul class="nav-links">
@@ -704,6 +321,9 @@
                         <li><a href="{{ route('categories.index') }}" class="{{ request()->routeIs('categories.*') ? 'active' : '' }}">Categories</a></li>
                         <li><a href="{{ route('tags.index') }}" class="{{ request()->routeIs('tags.*') ? 'active' : '' }}">Tags</a></li>
                     </ul>
+                    <form action="{{ route('posts.search') }}" method="GET" class="search-form hidden">
+                        <input type="text" name="search" placeholder="Search..." class="search-input" value="{{ request('search') }}">
+                    </form>
                     <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
@@ -742,6 +362,31 @@
         <!-- Main Content with Dark Background -->
         <main class="main-content">
             @yield('content')
+        @stack('scripts')
         </main>
-    </body>
+
+    <!-- SwiperJS JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchIcon = document.querySelector('.search-icon');
+            const searchForm = document.querySelector('.search-form');
+
+            searchIcon.addEventListener('click', function (e) {
+                e.stopPropagation();
+                searchForm.classList.toggle('hidden');
+                if (!searchForm.classList.contains('hidden')) {
+                    searchForm.querySelector('.search-input').focus();
+                }
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!searchForm.contains(e.target) && !searchIcon.contains(e.target)) {
+                    searchForm.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
 </html>

@@ -6,7 +6,7 @@
 
 <div class="form-group">
     <label for="content">Content</label>
-    <textarea name="content" id="content" rows="8" class="form-control @error('content') error @enderror">{{ old('content', $post->content ?? '') }}</textarea>
+    <textarea name="content" id="content" rows="10" class="form-control @error('content') error @enderror">{{ old('content', $post->content ?? '') }}</textarea>
     @error('content')<div class="error-message">{{ $message }}</div>@enderror
 </div>
 

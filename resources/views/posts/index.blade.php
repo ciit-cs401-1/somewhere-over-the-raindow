@@ -3,111 +3,48 @@
 @section('title', 'Posts')
 
 @section('content')
-    <!-- Featured Section -->
-    <div class="featured-section">
-        <div class="section-header">
-            <h1 class="section-title">Latest</h1>
-            <a href="{{ route('posts.index') }}" class="view-all">View latest</a>
-        </div>
-        
-        <div class="featured-grid">
-            @if($posts->count() > 0)
-                <!-- Featured Main Post -->
-                <div class="featured-main">
-                    <div class="featured-category">
-                        @if($posts->first()->category)
-                            {{ strtoupper($posts->first()->category->name) }}
-                        @else
-                            FEATURED
-                        @endif
-                    </div>
-                    <h2 class="featured-title">
-                        <a href="{{ route('posts.show', $posts->first()) }}" style="color: white; text-decoration: none;">
-                            {{ $posts->first()->title }}
-                        </a>
-                    </h2>
-                    <p class="featured-description">
-                        {{ Str::limit($posts->first()->content, 150) }}
-                    </p>
-                </div>
-
-                <!-- Featured Sidebar Posts -->
-                <div class="featured-sidebar">
-                    @foreach($posts->skip(1)->take(4) as $post)
-                        <div class="post-card">
-                            <div class="post-image"></div>
-                            <div class="post-content">
-                                <div class="post-category">
-                                    @if($post->category)
-                                        {{ strtoupper($post->category->name) }}
-                                    @else
-                                        GENERAL
-                                    @endif
-                                </div>
-                                <h3 class="post-title">
-                                    <a href="{{ route('posts.show', $post) }}" style="color: inherit; text-decoration: none;">
-                                        {{ $post->title }}
-                                    </a>
-                                </h3>
-                                <div class="post-meta">
-                                    <span class="post-views">{{ rand(100, 2000) }} views</span>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
-        </div>
+    <!-- Hero Slider Header -->
+    <div class="section-header">
+        <h2 class="section-title">Hot Topics</h2>
     </div>
 
-    <!-- Filters -->
-    <div class="filters">
-        <h3>Filter Posts</h3>
-        <form method="GET" action="{{ route('posts.index') }}">
-            <div class="filter-row">
-                <div class="filter-group">
-                    <label for="category_id">Category</label>
-                    <select name="category_id" id="category_id" class="filter-select">
-                        <option value="">All Categories</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
-                                {{ $category->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="tags">Tags</label>
-                    <div class="multi-select-dropdown">
-                        <div class="multi-select-display" onclick="toggleTagsDropdown()">
-                            <span class="selected-tags">
-                                @if(request('tags'))
-                                    {{ count(request('tags')) }} tag(s) selected
-                                @else
-                                    All Tags
-                                @endif
-                            </span>
-                            <span class="dropdown-arrow">▼</span>
-                        </div>
-                        <div class="multi-select-options" id="tagsDropdown">
-                            @foreach($tags as $tag)
-                                <label class="multi-select-option">
-                                    <input type="checkbox" name="tags[]" value="{{ $tag->id }}" 
-                                           {{ in_array($tag->id, request('tags', [])) ? 'checked' : '' }}
-                                           onchange="updateSelectedTags()">
-                                    <span class="tag-label">#{{ $tag->name }}</span>
-                                </label>
-                            @endforeach
+    <!-- Hero Slider Section -->
+    <div class="hero-slider-container">
+        <!-- Swiper -->
+        <div class="swiper-container hero-swiper">
+            <div class="swiper-wrapper">
+                @foreach($posts->take(5) as $post) <!-- Limiting to 5 for the hero slider -->
+                <div class="swiper-slide">
+                    <div class="slide-background" style="background-image: url('{{ $post->featured_image ? asset('storage/' . $post->featured_image) : 'https://placehold.co/1600x900/34495e/ecf0f1?text=' . urlencode($post->category->name ?? 'Blog Post') }}');"></div>
+                    <div class="slide-content">
+                        <div class="info-box">
+                            <a href="{{ route('posts.index', ['category_id' => $post->category->id]) }}" class="post-category category-{{ strtolower(str_replace(' ', '-', $post->category->name ?? 'general')) }}" style="text-decoration: none;">
+                                {{ strtoupper($post->category->name ?? 'GENERAL') }}
+                            </a>
+                            <h2 class="slide-title">{{ $post->title }}</h2>
+                            <p class="slide-excerpt">{{ Str::limit($post->excerpt, 150) }}</p>
+                            @if($post->tags->count() > 0)
+                                <div class="post-tags" style="margin-bottom: 16px;">
+                                    @foreach($post->tags->take(3) as $tag)
+                                        <a href="{{ route('posts.index', ['tags[]' => $tag->id]) }}" class="tag-label" style="text-decoration: none; background-color: #21262d; padding: 4px 10px; border-radius: 15px; font-size: 12px;">#{{ $tag->name }}</a>
+                                    @endforeach
+                                </div>
+                            @endif
+                            <a href="{{ route('posts.show', $post) }}" class="btn btn-primary">Read More</a>
                         </div>
                     </div>
                 </div>
-                <div class="filter-buttons">
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                    <a href="{{ route('posts.index') }}" class="btn btn-outline">Clear Filters</a>
-                </div>
+                @endforeach
             </div>
-        </form>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+            <!-- Add Navigation -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
     </div>
+
+
 
     <!-- Posts Header -->
     <div class="section-header">
@@ -116,46 +53,49 @@
     </div>
 
     @if($posts->count())
+
         <!-- Posts Grid -->
         <div class="posts-grid">
             @foreach($posts as $post)
                 <div class="post-card">
-                    <div class="post-image"></div>
+                    <a href="{{ route('posts.show', $post) }}" class="post-image-link">
+                        <img src="{{ $post->featured_image ? asset('storage/' . $post->featured_image) : 'https://placehold.co/600x400/34495e/ecf0f1?text=' . urlencode($post->title) }}" alt="{{ $post->title }}" class="post-image">
+                    </a>
                     <div class="post-content">
-                        <div class="post-category">
-                            @if($post->category)
-                                {{ strtoupper($post->category->name) }}
-                            @else
-                                GENERAL
-                            @endif
-                        </div>
+                        <a href="{{ route('posts.index', ['category_id' => $post->category->id]) }}" class="post-category category-{{ strtolower(str_replace(' ', '-', $post->category->name ?? 'general')) }}" style="text-decoration: none;">
+                            {{ strtoupper($post->category->name ?? 'GENERAL') }}
+                        </a>
                         <h3 class="post-title">
                             <a href="{{ route('posts.show', $post) }}" style="color: inherit; text-decoration: none;">
                                 {{ $post->title }}
                             </a>
                         </h3>
                         <div class="post-meta">
-                            <span class="post-views">{{ rand(100, 2000) }} views</span>
+                            <span>By {{ $post->user->name }}</span>
+                            <span>{{ $post->created_at->format('M d, Y') }}</span>
+                            <span style="display: flex; align-items: center; gap: 4px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                </svg>
+                                {{ $post->views }}
+                            </span>
                         </div>
-                        @auth
-                            <div class="post-actions" style="margin-top: 16px; display: flex; gap: 8px;">
-                                <a href="{{ route('posts.edit', $post) }}" class="btn btn-outline" style="font-size: 12px; padding: 4px 8px;">Edit</a>
-                                <form action="{{ route('posts.destroy', $post) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this post?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-primary" style="font-size: 12px; padding: 4px 8px;">Delete</button>
-                                </form>
-                            </div>
-                        @endauth
+                        <div class="card-footer">
+                            @if($post->tags->count() > 0)
+                                <div class="post-tags">
+                                    @foreach($post->tags->take(3) as $tag)
+                                        <a href="{{ route('posts.index', ['tags[]' => $tag->id]) }}" class="tag-label" style="text-decoration: none;">#{{ $tag->name }}</a>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             @endforeach
         </div>
 
-        <!-- Pagination -->
-        <div class="pagination">
-            {{ $posts->links() }}
-        </div>
+
     @else
         <div class="alert alert-info">
             <p>No posts found.</p>
@@ -168,115 +108,42 @@
         </div>
     @endif
 
-    <style>
-        /* Multi-Select Dropdown Styles */
-        .multi-select-dropdown {
-            position: relative;
-            display: inline-block;
-        }
+    @push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const swiper = new Swiper('.hero-swiper', {
+            // Optional parameters
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            coverflowEffect: {
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+            },
 
-        .multi-select-display {
-            background-color: #0d1117;
-            color: #e6edf3;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 12px;
-            font-size: 14px;
-            min-width: 150px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.2s ease;
-        }
+            // If we need pagination
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
 
-        .multi-select-display:hover {
-            border-color: #667eea;
-        }
-
-        .dropdown-arrow {
-            font-size: 10px;
-            color: #8b949e;
-            transition: transform 0.2s ease;
-        }
-
-        .multi-select-options {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background-color: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            margin-top: 4px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .multi-select-option {
-            display: flex;
-            align-items: center;
-            padding: 8px 12px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            border-bottom: 1px solid #30363d;
-        }
-
-        .multi-select-option:last-child {
-            border-bottom: none;
-        }
-
-        .multi-select-option:hover {
-            background-color: #21262d;
-        }
-
-        .multi-select-option input[type="checkbox"] {
-            margin-right: 8px;
-            accent-color: #667eea;
-        }
-
-        .tag-label {
-            color: #e6edf3;
-            font-size: 14px;
-        }
-
-        .selected-tags {
-            color: #e6edf3;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 12px;
-            align-items: flex-end;
-        }
-    </style>
-
-    <script>
-        function toggleTagsDropdown() {
-            const dropdown = document.getElementById('tagsDropdown');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function updateSelectedTags() {
-            const checkboxes = document.querySelectorAll('input[name="tags[]"]:checked');
-            const display = document.querySelector('.selected-tags');
-            
-            if (checkboxes.length === 0) {
-                display.textContent = 'All Tags';
-            } else {
-                display.textContent = `${checkboxes.length} tag(s) selected`;
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.querySelector('.multi-select-dropdown');
-            if (!dropdown.contains(event.target)) {
-                document.getElementById('tagsDropdown').style.display = 'none';
-            }
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
         });
-    </script>
+    });
+</script>
+@endpush
+
 @endsection 
