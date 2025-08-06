@@ -40,12 +40,16 @@
                     </div>
                     @auth
                         <div class="post-actions" style="margin-top: 16px; display: flex; gap: 8px;">
-                            <a href="{{ route('categories.edit', $category) }}" class="btn btn-warning" style="font-size: 12px; padding: 4px 8px;">Edit</a>
-                            <form action="{{ route('categories.destroy', $category) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this category?');">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-danger" style="font-size: 12px; padding: 4px 8px;">Delete</button>
-                            </form>
+                            @can('update', $category)
+                                <a href="{{ route('categories.edit', $category) }}" class="btn btn-warning" style="font-size: 12px; padding: 4px 8px;">Edit</a>
+                            @endcan
+                            @can('delete', $category)
+                                <form action="{{ route('categories.destroy', $category) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this category?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-danger" style="font-size: 12px; padding: 4px 8px;">Delete</button>
+                                </form>
+                            @endcan
                         </div>
                     @endauth
                 </article>

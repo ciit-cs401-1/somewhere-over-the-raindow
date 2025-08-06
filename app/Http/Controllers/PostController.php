@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -44,8 +45,14 @@ class PostController extends Controller
         
         $categories = Category::all();
         $tags = Tag::all();
-            
-        return view('posts.index', compact('posts', 'categories', 'tags'));
+
+        $hot_posts = Post::with(['category', 'user', 'tags'])
+            ->published()
+            ->orderByDesc('views')
+            ->take(5)
+            ->get();
+
+        return view('posts.index', compact('posts', 'categories', 'tags', 'hot_posts'));
     }
 
     /**

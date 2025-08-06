@@ -40,6 +40,8 @@ class CategoryController extends Controller
             'description' => 'nullable|string'
         ]);
 
+        $validated['user_id'] = auth()->id();
+
         $category = Category::create($validated);
 
         if ($request->wantsJson()) {
@@ -65,6 +67,8 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        $this->authorize('update', $category);
+
         return view('categories.edit', compact('category'));
     }
 
@@ -73,6 +77,8 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        $this->authorize('update', $category);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'description' => 'nullable|string'
@@ -89,6 +95,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        $this->authorize('delete', $category);
+
         $category->delete();
         
         return redirect()->route('categories.index')

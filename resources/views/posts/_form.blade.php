@@ -35,6 +35,15 @@
 </div>
 
 <div class="form-group">
+    <label for="status">Status</label>
+    <select name="status" id="status" class="form-control @error('status') error @enderror">
+        <option value="draft" {{ old('status', $post->status ?? '') == 'draft' ? 'selected' : '' }}>Draft</option>
+        <option value="published" {{ old('status', $post->status ?? '') == 'published' ? 'selected' : '' }}>Published</option>
+    </select>
+    @error('status')<div class="error-message">{{ $message }}</div>@enderror
+</div>
+
+<div class="form-group">
     <label for="tags">Tags</label>
     <select name="tags[]" id="tags" multiple class="form-control @error('tags') error @enderror">
         @foreach($tags as $tag)

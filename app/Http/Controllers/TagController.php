@@ -39,6 +39,8 @@ class TagController extends Controller
             'name' => 'required|string|max:255|unique:tags'
         ]);
 
+        $validated['user_id'] = auth()->id();
+
         $tag = Tag::create($validated);
 
         if ($request->wantsJson()) {
@@ -64,6 +66,8 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
+        $this->authorize('update', $tag);
+
         return view('tags.edit', compact('tag'));
     }
 
@@ -72,6 +76,8 @@ class TagController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
+        $this->authorize('update', $tag);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:tags,name,' . $tag->id
         ]);
@@ -87,6 +93,8 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
+        $this->authorize('delete', $tag);
+
         $tag->delete();
         
         return redirect()->route('tags.index')
