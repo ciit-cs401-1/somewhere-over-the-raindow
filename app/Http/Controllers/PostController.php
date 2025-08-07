@@ -46,9 +46,14 @@ class PostController extends Controller
         $categories = Category::all();
         $tags = Tag::all();
 
-        $hot_posts = Post::with(['category', 'user', 'tags'])
-            ->published()
-            ->orderByDesc('views')
+        $hot_posts_query = Post::with(['category', 'user', 'tags'])
+            ->published();
+
+        if ($request->filled('category_id')) {
+            $hot_posts_query->where('category_id', $request->category_id);
+        }
+
+        $hot_posts = $hot_posts_query->orderByDesc('views')
             ->take(5)
             ->get();
 
