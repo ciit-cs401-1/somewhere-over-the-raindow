@@ -67,7 +67,10 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        $this->authorize('update', $category);
+        // Check if the authenticated user is the owner of the category
+        if (auth()->id() !== $category->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
 
         return view('categories.edit', compact('category'));
     }
@@ -77,7 +80,10 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $this->authorize('update', $category);
+        // Check if the authenticated user is the owner of the category
+        if (auth()->id() !== $category->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
@@ -95,7 +101,10 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $this->authorize('delete', $category);
+        // Check if the authenticated user is the owner of the category
+        if (auth()->id() !== $category->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $category->delete();
         
