@@ -144,6 +144,11 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        // Check if the authenticated user is the owner of the post
+        if (auth()->id() !== $post->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+        
         $categories = Category::all();
         $tags = Tag::all();
         
@@ -155,7 +160,10 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        $this->authorize('update', $post);
+        // Check if the authenticated user is the owner of the post
+        if (auth()->id() !== $post->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
@@ -195,7 +203,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $this->authorize('delete', $post);
+        // Check if the authenticated user is the owner of the post
+        if (auth()->id() !== $post->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+        
         $post->delete();
         
         return redirect()->route('posts.index')
